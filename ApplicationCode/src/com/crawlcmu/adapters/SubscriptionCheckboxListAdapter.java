@@ -17,10 +17,7 @@ import android.widget.TextView;
 import com.crawlcmu.datamodel.CheckBoxDataModel;
 import com.example.crawlcmu.R;
 
-/**
- * @author ishan
- *
- */
+
 public class SubscriptionCheckboxListAdapter extends BaseAdapter implements OnClickListener 
 {
 	/** The inflator used to inflate the XML layout */

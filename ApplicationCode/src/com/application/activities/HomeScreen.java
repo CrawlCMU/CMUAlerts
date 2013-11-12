@@ -1,15 +1,21 @@
 package com.application.activities;
 
-import com.example.crawlcmu.R;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.application.DBLayout.MySQLiteHelper;
+import com.application.DBLayout.Preferences;
+import com.application.FileIO.Helper;
+import com.example.crawlcmu.R;
 
 public class HomeScreen extends Activity 
 {
@@ -25,7 +31,12 @@ public class HomeScreen extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_screen);
 		addListenerOnButton();
-		
+		Helper.writeFromFileToDB("MyFile.txt", getApplicationContext());
+		MySQLiteHelper db = new MySQLiteHelper(getApplicationContext());
+		List<Preferences> preferences = db.getPreferences("Facebook");
+		for(Preferences p : preferences){
+			Log.d("CrawlCMU", p.toString());
+		}
 	}
 
 	private void addListenerOnButton() 
