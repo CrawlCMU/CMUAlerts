@@ -1,7 +1,9 @@
 package com.application.DBLayout;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -32,7 +34,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create preference table
-        String CREATE_preference_TABLE = "CREATE TABLE preferenceTable ( " +
+        String CREATE_preference_TABLE = "CREATE TABLE IF NOT EXISTS preferenceTable ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
                 "type TEXT, " +
                 "title TEXT," +
@@ -40,13 +42,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
                 "status TEXT)";
  
         // create preference table
+        db.execSQL("DROP TABLE IF EXISTS preferenceTable");
         db.execSQL(CREATE_preference_TABLE);
     }
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Drop older preference table if existed
-        db.execSQL("DROP TABLE IF EXISTS preference");
+        db.execSQL("DROP TABLE IF EXISTS preferenceTable");
  
         // create new preference table
         this.onCreate(db);
@@ -58,7 +61,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 		
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
-		
 		// 2. create ContentValues to add key "column"/value
 		ContentValues values = new ContentValues();
 		values.put(KEY_TYPE, preference.getType()); // get type
@@ -73,6 +75,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 		
 		// 4. close
 		db.close(); 
+	}
+	
+	public void initializeDB(){
+		SQLiteDatabase db = this.getWritableDatabase();
+		onCreate(db);
 	}
 	
 	public List<Preferences> getPreferences(String type){
@@ -140,7 +147,4 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 	       // return preferences
 	       return preferences;
 	   }
-	
-	
-	
 }

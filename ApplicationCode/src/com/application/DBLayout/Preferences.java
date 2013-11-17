@@ -52,6 +52,16 @@ public class Preferences {
 		return "Type: "+type+" Title: "+title+" Url: "+url+" Status:"+status;
 	}
 	
+	public int hashCode(){
+		return url.hashCode();
+	}
+	
+	public boolean equals(Object p){
+		if(p instanceof Preferences){
+			return url.equals(((Preferences) p).url);
+		}
+		return false;
+	}
 
 //	private enum Type{
 //		FACEBOOK,

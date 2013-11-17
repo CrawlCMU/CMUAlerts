@@ -26,15 +26,15 @@ public class Helper {
 			return;
 		}
 		MySQLiteHelper db = new MySQLiteHelper(context);
+		// Delete table before adding contents.
+//		db.destroyDB();
 		String[] lines = fileContents.split(";");
 		for(String line : lines){
 			String[] fields = line.split(",");
-			Preferences p = new Preferences(fields[0],fields[1],fields[2],"unsubscribed");
+			Preferences p = new Preferences(fields[0].trim(),fields[1].trim(),fields[2].trim(),"unsubscribed");
 			db.addpreference(p);
-			
 		}
 		done = true;	// Set the flag
 		db.close();	// CLose the database connection
 	}
-
 }

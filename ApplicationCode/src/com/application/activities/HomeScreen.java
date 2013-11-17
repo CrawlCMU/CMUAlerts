@@ -31,12 +31,14 @@ public class HomeScreen extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_screen);
 		addListenerOnButton();
-		Helper.writeFromFileToDB("MyFile.txt", getApplicationContext());
 		MySQLiteHelper db = new MySQLiteHelper(getApplicationContext());
-		List<Preferences> preferences = db.getPreferences("Facebook");
+		db.initializeDB();
+		Helper.writeFromFileToDB("MyFile.txt", getApplicationContext());
+		
+		List<Preferences> preferences = db.getAllpreferences();
 		for(Preferences p : preferences){
-			Log.d("CrawlCMU", p.toString());
-		}
+			Log.d("CrawlCMU", "This is a test "+p.toString());
+		}	
 	}
 
 	private void addListenerOnButton() 
@@ -48,7 +50,6 @@ public class HomeScreen extends Activity
 		
 		cmuFeedButton.setOnClickListener(new OnClickListener() 
 		{
-			
 			@Override
 			public void onClick(View v) 
 			{
@@ -58,11 +59,9 @@ public class HomeScreen extends Activity
 		
 		fbFeedButton.setOnClickListener(new OnClickListener() 
 		{
-			
 			@Override
 			public void onClick(View v) 
 			{
-				
 				Toast.makeText(HomeScreen.this,"FBFeed is clicked!", Toast.LENGTH_SHORT).show();
 				Intent fbIntent = new Intent(getBaseContext(),FBFeedActivity.class);
 				startActivity(fbIntent);
@@ -71,7 +70,6 @@ public class HomeScreen extends Activity
 		
 		alertFeedButton.setOnClickListener(new OnClickListener() 
 		{
-			
 			@Override
 			public void onClick(View v) 
 			{
@@ -83,7 +81,6 @@ public class HomeScreen extends Activity
 		
 		twitterFeedButton.setOnClickListener(new OnClickListener() 
 		{
-			
 			@Override
 			public void onClick(View v) 
 			{
