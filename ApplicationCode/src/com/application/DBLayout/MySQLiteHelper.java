@@ -77,18 +77,29 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 		db.close(); 
 	}
 	
+	/**
+	 * Drops the table if exists and creates a new one
+	 */
 	public void initializeDB(){
 		SQLiteDatabase db = this.getWritableDatabase();
 		onCreate(db);
 	}
 	
-	public List<Preferences> getPreferences(String type){
+	public List<Preferences> getPreferences(String type, String status){
 		   //Log the transaction
-	       Log.d("CrawlCMU", "MYSQLiteHelper : getPreference() called");
+	       Log.d("CrawlCMU", "MYSQLiteHelper : getPreferences() called");
 	       List<Preferences> preferences = new LinkedList<Preferences>();
 	       
+	       if(!type.equals("Facebook") && !type.equals("Twitter") && !type.equals("Alerts") && !type.equals("CMUFeed")){
+	    	   Log.d("CrawlCMU", "MYSQLiteHelper : getPreferences() Invalid type");
+	       	   return null;
+	       }else if(!status.equals("subscribed") && !status.equals("unsubscribed")){
+	    	   Log.d("CrawlCMU", "MYSQLiteHelper : getPreferences() Invalid status");
+	       	   return null;
+	       }
+	       
 	       // 1. build the query
-	       String query = "SELECT  * FROM " + TABLE_NAME+" WHERE type=\""+type+"\"";
+	       String query = "SELECT  * FROM " + TABLE_NAME+" WHERE type=\""+type+"\" and status=\""+status+"\"";
 	 
 	       // 2. get reference to writable DB
 	       SQLiteDatabase db = this.getReadableDatabase();
@@ -112,8 +123,30 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 	       db.close();
 	       // return preferences
 	       return preferences;
-	       
 	}
+	
+	
+	// This may not be very efficient.We are writing only one row.
+	// We should ideally batch requests up 
+	public void setPreference(String title, String status){
+		   //Log the transaction
+	       Log.d("CrawlCMU", "MYSQLiteHelper : setPreference() called");
+	       
+	       if(!status.equals("unsubscribed") && !status.equals("subscribed")){
+	    	   Log.d("CrawlCMU", "MYSQLiteHelper : setPreference() Incorrect status");
+	    	   return;
+	       }
+	       
+	       // 1. build the query
+	       String query = "UPDATE "+TABLE_NAME+" SET status=\""+status+"\" where title=\""+title+"\"";
+	 
+	       // 2. get reference to writable DB
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       // 3. execute query 
+	       db.execSQL(query);
+	       db.close();
+	}
+	
 	
 	// Returns all values in the table
 	public List<Preferences> getAllpreferences() {

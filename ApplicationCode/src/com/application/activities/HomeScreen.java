@@ -31,14 +31,9 @@ public class HomeScreen extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_screen);
 		addListenerOnButton();
-		MySQLiteHelper db = new MySQLiteHelper(getApplicationContext());
-		db.initializeDB();
+		MySQLiteHelper sqlHelper = new MySQLiteHelper(getApplicationContext());
+		sqlHelper.initializeDB();
 		Helper.writeFromFileToDB("MyFile.txt", getApplicationContext());
-		
-		List<Preferences> preferences = db.getAllpreferences();
-		for(Preferences p : preferences){
-			Log.d("CrawlCMU", "This is a test "+p.toString());
-		}	
 	}
 
 	private void addListenerOnButton() 

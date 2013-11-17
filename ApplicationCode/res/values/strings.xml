@@ -13,5 +13,6 @@
     <string name="subcribe_string">Subscribe</string>
     <string name="unsubscribe_string">Unsubscribe</string>
     <string name="selected">Selected</string>
+    <string name="submit_preference">Submit Preference</string>
 
 </resources>
