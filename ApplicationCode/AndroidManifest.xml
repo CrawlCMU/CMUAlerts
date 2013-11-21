@@ -44,7 +44,7 @@
             android:label="@string/title_activity_fbmanage_subscriptions" >
         </activity>
         <activity
-            android:name="com.application.activities.MainActivity"
+            android:name="com.application.activities.FBLoginActivity"
             android:label="@string/title_activity_main" >
         </activity>
     </application>
