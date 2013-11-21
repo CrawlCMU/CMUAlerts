@@ -31,7 +31,7 @@ public class Helper {
 		String[] lines = fileContents.split(";");
 		for(String line : lines){
 			String[] fields = line.split(",");
-			Preferences p = new Preferences(fields[0].trim(),fields[1].trim(),fields[2].trim(),"unsubscribed");
+			Preferences p = new Preferences(fields[0].trim(),fields[1].trim(),fields[2].trim(),fields[3].trim());
 			db.addpreference(p);
 		}
 		done = true;	// Set the flag
