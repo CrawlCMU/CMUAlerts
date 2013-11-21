@@ -57,9 +57,12 @@ public class HomeScreen extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				Toast.makeText(HomeScreen.this,"FBFeed is clicked!", Toast.LENGTH_SHORT).show();
-				Intent fbIntent = new Intent(getBaseContext(),FBFeedActivity.class);
-				startActivity(fbIntent);
+				Intent loginIntent = new Intent(getBaseContext(),MainActivity.class);
+				startActivity(loginIntent);
+				
+//				Toast.makeText(HomeScreen.this,"FBFeed is clicked!", Toast.LENGTH_SHORT).show();
+//				Intent fbIntent = new Intent(getBaseContext(),FBFeedActivity.class);
+//				startActivity(fbIntent);
 			}
 		});
 		
