@@ -9,21 +9,21 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
 public class FBLoginActivity extends FragmentActivity {
-	private FBLoginFragment mainFragment;
+	private FBLoginFragment fbLoginFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
 	        // Add the fragment on initial activity setup
-	        mainFragment = new FBLoginFragment();
+	        fbLoginFragment = new FBLoginFragment();
 	        getSupportFragmentManager()
 	        .beginTransaction()
-	        .add(android.R.id.content, mainFragment)
+	        .add(android.R.id.content, fbLoginFragment)
 	        .commit();
 	    } else {
 	        // Or set the fragment from restored state info
-	        mainFragment = (FBLoginFragment) getSupportFragmentManager()
+	        fbLoginFragment = (FBLoginFragment) getSupportFragmentManager()
 	        .findFragmentById(android.R.id.content);
 	    }
 	}

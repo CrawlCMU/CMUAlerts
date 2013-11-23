@@ -16,5 +16,6 @@
     <string name="submit_preference">Submit Preference</string>
     <string name="app_id">517969238299772</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="batchRequest">Batch Request</string>
 
 </resources>
