@@ -2,13 +2,13 @@ package com.crawlcmu.entities;
 
 public abstract class FeedModel 
 {
-	private StringBuilder feedText;
-	private int id;
+	private String feedText;
+	private String id;
 	private String URL;
 	
 	
 	
-	public FeedModel(StringBuilder feedText, int id, String uRL) 
+	public FeedModel(String feedText, String id, String uRL) 
 	{
 		super();
 		this.feedText = feedText;
@@ -22,19 +22,19 @@ public abstract class FeedModel
 	public void setURL(String uRL) {
 		URL = uRL;
 	}
-	public StringBuilder getFeedText() 
+	public String getFeedText() 
 	{
 		return feedText;
 	}
-	public void setFeedText(StringBuilder feedText) 
+	public void setFeedText(String feedText) 
 	{
 		this.feedText = feedText;
 	}
-	public int getId() 
+	public String getId() 
 	{
 		return id;
 	}
-	public void setId(int id) 
+	public void setId(String id) 
 	{
 		this.id = id;
 	}

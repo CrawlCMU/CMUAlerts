@@ -3,6 +3,9 @@
  */
 package com.application.adapters;
 
+import java.util.ArrayList;
+
+import com.crawlcmu.entities.FBFeed;
 import com.example.crawlcmu.R;
 import com.example.crawlcmu.R.drawable;
 import com.example.crawlcmu.R.id;
@@ -20,25 +23,17 @@ import android.widget.TextView;
  * @author ishan
  *
  */
-public class FeedArrayAdapter extends ArrayAdapter<String> 
+public class FeedArrayAdapter extends ArrayAdapter<FBFeed> 
 {
 	private final Context context;
-	private final String[] values;
-	private String[] dummyContent = new String[]{"Spacious single room available for female temporary stayee/sublessee on Bayard and Melwood. Free wi-fi. Please message for more details."
-												,"Does anyone have a folding table they want to get rid off?"
-												, "Kudos to IGSA for such a great event !!!! cheers for the organizers !!! Its was a great experience in midst of the busy monotonous schedule !!!"
-												, "Is there anyone pursuing a Computational Finance minor?"
-												, "Can 80-210 Logic and Proofs be counted as a Logics & Languages elective?"
-												, "How is 15-415 Database Applications in terms of course load?"
-												};
-												
+	private ArrayList<FBFeed> feeds = new ArrayList<FBFeed>();
 	
-	
-	public FeedArrayAdapter(Context context, String[] values) 
+	public FeedArrayAdapter(Context context, ArrayList<FBFeed> Feeds) 
 	{
-		super(context, R.layout.custom_list_feed, values);
+		super(context, R.layout.custom_list_feed, Feeds);
 		this.context = context;
-		this.values = values;
+		this.feeds = Feeds;
+		
 	}
 	
 	@Override
@@ -50,20 +45,34 @@ public class FeedArrayAdapter extends ArrayAdapter<String>
 		View rowView = inflater.inflate(R.layout.custom_list_feed, parent, false);
 		TextView textView = (TextView) rowView.findViewById(R.id.fbFeed);
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
-		textView.setText(dummyContent[position]);
+		
+		
+		
+		textView.setText(feeds.get(position).getFeedText());
  
 		// Change icon based on name
-		String s = values[position];
+		String s = feeds.get(position).getId();
  
 		System.out.println(s);
  
-		if (s.equals("FB")) {
-			imageView.setImageResource(R.drawable.ic_launcher_fb);
-		} else if (s.equals("IGSA")) {
+		// IGSA
+		if (s.contains("107242810108")) 
+		{
 			imageView.setImageResource(R.drawable.ic_launcher_igsa);
 		}
+		
+		// Overheard at CMU
+		else if(s.contains("168160887879"))
+		{
+			imageView.setImageResource(R.drawable.ic_overheard);
+		} 
+		
+		// CMU ECE MAC
+		else if(s.contains("153359654710529"))
+		{
+			imageView.setImageResource(R.drawable.ic_ece);
+		}
 
- 
 		return rowView;
 	}
 

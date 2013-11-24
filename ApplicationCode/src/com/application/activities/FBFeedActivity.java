@@ -1,8 +1,13 @@
 package com.application.activities;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,21 +16,50 @@ import android.widget.Toast;
 
 import com.application.adapters.FeedArrayAdapter;
 import com.application.managesubscriptions.FBSubscribeActivity;
+import com.crawlcmu.entities.FBFeed;
 import com.example.crawlcmu.R;
 
 public class FBFeedActivity extends ListActivity 
 {
-	private static final String[] FEEDSOURCE = new String[] { "IGSA", "IGSA","IGSA","FB","FB","FB"};
-
+	private static final String TAG = "FBFeedActivity";
+	private static final String URL = "https://www.facebook.com";
+	
+	private ArrayList<FBFeed> feeds;
+	private HashMap<String, ArrayList<String>> crawlFeeds = new HashMap<String, ArrayList<String>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		setListAdapter(new FeedArrayAdapter(this, FEEDSOURCE));
+		Intent showFeedsIntent = getIntent();
+		crawlFeeds.clear();
+		crawlFeeds = (HashMap<String, ArrayList<String>>)showFeedsIntent.getSerializableExtra("FeedsMap");
+	    Log.v("HashMapTest", crawlFeeds.toString());
+	  
+	    feeds = new ArrayList<FBFeed>();
+	    
+	    populateFeedData();
+		
+		setListAdapter(new FeedArrayAdapter(this, feeds));
 	}
 
 	
+	private void populateFeedData() 
+	{
+		
+		for (Map.Entry<String, ArrayList<String>> entry : crawlFeeds.entrySet()) 
+		{
+			Log.d(TAG,"Key : " + entry.getKey() + " Value : "+ entry.getValue());
+			
+			for(String str:entry.getValue())
+			{
+				FBFeed feed = new FBFeed(str, entry.getKey(), URL);
+				feeds.add(feed);
+			}
+		}
+	}
+
+
 	@Override
 	//TODO: This will have to take the user to the post with that ID
 	protected void onListItemClick(ListView l, View v, int position, long id) {

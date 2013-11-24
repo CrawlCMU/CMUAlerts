@@ -43,12 +43,15 @@ public class FBLoginFragment extends Fragment
 	MySQLiteHelper sqlHelper;
 	private HashMap<String,String> groupIDMap;
 	
-	private Button batchRequestButton;
-	private TextView textViewResults;
+	//private Button batchRequestButton;
+	
+	private static final int NumFeedsPerGroup = 3; 
 	
 	private static int groupID;
+	private int numSubscribed;
 	
-	private HashMap<String, ArrayList<String>> crawlFeeds = new HashMap<String, ArrayList<String>>();
+	// this is a hashmap of String (Group Name) and its Feeds are stored in ArrayList<Strings>
+	private HashMap<String, ArrayList<String>> crawlFeeds;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,20 +60,25 @@ public class FBLoginFragment extends Fragment
 	    uiHelper.onCreate(savedInstanceState);
 	    sqlHelper = new MySQLiteHelper(getActivity());
 	    groupIDMap = new HashMap<String, String>();
+	    crawlFeeds = new HashMap<String, ArrayList<String>>();
 	    
 	    initializeSubscriptionList();
 	}
 	
 	private void initializeSubscriptionList() 
 	{
+		groupID = 0;
+		numSubscribed = 0;
 		List<Preferences> listPreferences;
 		listPreferences = sqlHelper.getPreferences("Facebook","subscribed");
 		
+		crawlFeeds.clear();
 		// Clear the hashmap, because this function will be called every time a group is subsribed/unsubscribed
 		groupIDMap.clear();
 		
 		for(Preferences p : listPreferences)
 		{
+			numSubscribed++;
 			// Build the hashmap of preferences
 			String title = p.getTitle();
 			String url = p.getUrl();
@@ -107,6 +115,10 @@ public class FBLoginFragment extends Fragment
 	    // For scenarios where the main activity is launched and user
 	    // session is not null, the session state change notification
 	    // may not be triggered. Trigger it if it's open/closed.
+	    
+	    initializeSubscriptionList();
+	    
+	    
 	    Session session = Session.getActiveSession();
 	    if (session != null &&
 	           (session.isOpened() || session.isClosed()) ) {
@@ -145,12 +157,12 @@ public class FBLoginFragment extends Fragment
 	    if (state.isOpened()) 
 	    {
 	        Log.i(TAG, "Logged in...");
-	        batchRequestButton.setVisibility(View.VISIBLE);
+	        //batchRequestButton.setVisibility(View.VISIBLE);
 	    } 
 	    else if (state.isClosed()) 
 	    {
 	        Log.i(TAG, "Logged out...");
-	        batchRequestButton.setVisibility(View.INVISIBLE);
+	        //batchRequestButton.setVisibility(View.INVISIBLE);
 	    }
 	}
 	
@@ -163,15 +175,13 @@ public class FBLoginFragment extends Fragment
 	
 	
 	
-	private void doBatchRequest() {
-	    textViewResults = (TextView) this.getView().findViewById(R.id.textViewResults);
-	    textViewResults.setText("");
+	private void doBatchRequest() 
+	{
+	   
 	    
-
-	    //String[] requestIds = {"580647781993254/feed","107242810108/feed","307977919260243/feed"};
-
 	    // populate the group IDs from the groupID hashmap
 	    String[] requestIds = new String[groupIDMap.size()];
+	    
 	    int i = 0;
 	    for (Map.Entry<String, String> entry : groupIDMap.entrySet()) 
 	    {
@@ -179,14 +189,17 @@ public class FBLoginFragment extends Fragment
 			requestIds[i++] = entry.getValue() + "/feed";
 		}
 	    
+	    
 	    RequestBatch requestBatch = new RequestBatch();
 	    for (final String requestId : requestIds) {
 	        requestBatch.add(new Request(Session.getActiveSession(), 
 	                requestId, null, null, new Request.Callback() {
-	            public void onCompleted(Response response) {
+	            public void onCompleted(Response response) 
+	            {
+	            	groupID++;
 	            	StringBuilder myuserInfo = new StringBuilder("");
 	                GraphObject graphObject = response.getGraphObject();
-	                String s = textViewResults.getText().toString();
+	                
 	                if (graphObject != null) 
 	                {
 	                        ArrayList<String> feeds = new ArrayList<String>();
@@ -195,35 +208,31 @@ public class FBLoginFragment extends Fragment
 	                        if(groupFeeds!=null)
 	                        {
 	                        	Log.d(TAG, "FEEDS are available");
-	                        	for (int i=0; i < 2; i++) {
+	                        	for (int i=0; i < NumFeedsPerGroup; i++) {
 	            	                JSONObject grp = groupFeeds.optJSONObject(i);
 	            	                 
 	            	                feeds.add(grp.optString("message"));
 	            	            }   
 	            	    		
-	                        	switch(groupID)
-	                        	{
-	                        		case 0:
-	                        			crawlFeeds.put("For Sale @ CMU", feeds);
-	                        			groupID++;
-	                        			break;
-	                        		case 1:
-	                        			crawlFeeds.put("IGSA", feeds);
-	                        			groupID++;
-	                        			break;
-	                        		case 2:
-	                        			crawlFeeds.put("Computer Science", feeds);
-	                        			groupID++;
-	                        			break;
-	                        		default: break;
-	                        	}
-	                        	
+	                        	Log.d(TAG, "requestID = " + requestId + " Feeds = " + feeds.toString());
+	                        	crawlFeeds.put(requestId, feeds);
 	                        	myuserInfo.append(String.format("groups: %s\n\n", feeds.toString()));
 	                        }
-	                    	s = s + myuserInfo.toString();
+	                    	
 	                 }
 	                
-	                textViewResults.setText(s);
+	                if(groupID == numSubscribed)
+	                {
+	                	Log.d(TAG,"Feed Fetching Completed!");
+	                	
+	                	// now send the populated HashMap to the FBFeedActivity
+	                	Intent showFeedsIntent = new Intent(getActivity(),FBFeedActivity.class);
+	                	showFeedsIntent.putExtra("FeedsMap", crawlFeeds);
+	                	
+	                	Log.d(TAG,"Going to FBFeed Activity");
+	                	startActivity(showFeedsIntent);
+	                }
+	                
 	            }
 	        }));
 	    }
@@ -242,13 +251,21 @@ public class FBLoginFragment extends Fragment
 	    // Set user permissions for access token
 	    authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes","user_groups"));
 	    
-	    batchRequestButton = (Button) view.findViewById(R.id.batchRequestButton);
-	    batchRequestButton.setOnClickListener(new View.OnClickListener() {
-	        @Override
-	        public void onClick(View v) {
-	            doBatchRequest();        
-	        }
-	    });
+	    doBatchRequest();    
+        Log.d(TAG, "**************doBatchRequestCompleted***********");
+	    
+//	    batchRequestButton = (Button) view.findViewById(R.id.batchRequestButton);
+//	    batchRequestButton.setOnClickListener(new View.OnClickListener() {
+//	        
+//	    	// doBatchRequest is a function which fetches all the feeds
+//	    	// and populates the hashmap.
+//	    	@Override
+//	        public void onClick(View v) 
+//	        {
+//	            doBatchRequest();    
+//	            Log.d(TAG, "**************doBatchRequestCompleted***********");
+//	        }
+//	    });
 
 
 	    return view;

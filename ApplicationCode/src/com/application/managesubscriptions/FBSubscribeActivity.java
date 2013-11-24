@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.application.DBLayout.MySQLiteHelper;
 import com.application.DBLayout.Preferences;
+import com.application.activities.FBLoginActivity;
 import com.application.adapters.SubscriptionCheckboxListAdapter;
 import com.crawlcmu.entities.CheckBoxDataModel;
 import com.example.crawlcmu.R;
@@ -89,6 +90,10 @@ public class FBSubscribeActivity extends ListActivity
 					        	
 					    }
 					}
+					
+					Intent updateFeedsIntent = new Intent(getBaseContext(),FBLoginActivity.class);
+					startActivity(updateFeedsIntent);
+					
 					finish();
 				}
 		});

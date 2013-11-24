@@ -7,7 +7,7 @@ public class FBFeed extends FeedModel
 	private boolean hasExpired;
 	
 
-	public FBFeed(StringBuilder feedText, int id, String uRL) 
+	public FBFeed(String feedText, String id, String uRL) 
 	{
 		super(feedText, id, uRL);
 	}
