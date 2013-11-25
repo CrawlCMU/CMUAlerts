@@ -3,7 +3,7 @@ package com.application.activities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.application.DBLayout.MySQLiteHelper;
@@ -43,7 +44,9 @@ public class FBLoginFragment extends Fragment
 	MySQLiteHelper sqlHelper;
 	private HashMap<String,String> groupIDMap;
 	
-	//private Button batchRequestButton;
+	private ProgressBar bar;
+	
+	
 	
 	private static final int NumFeedsPerGroup = 3; 
 	
@@ -61,6 +64,7 @@ public class FBLoginFragment extends Fragment
 	    sqlHelper = new MySQLiteHelper(getActivity());
 	    groupIDMap = new HashMap<String, String>();
 	    crawlFeeds = new HashMap<String, ArrayList<String>>();
+	    
 	    
 	    initializeSubscriptionList();
 	}
@@ -157,11 +161,14 @@ public class FBLoginFragment extends Fragment
 	    if (state.isOpened()) 
 	    {
 	        Log.i(TAG, "Logged in...");
+	        bar.setVisibility(View.VISIBLE);
+	        
 	        //batchRequestButton.setVisibility(View.VISIBLE);
 	    } 
 	    else if (state.isClosed()) 
 	    {
 	        Log.i(TAG, "Logged out...");
+	        bar.setVisibility(View.INVISIBLE);
 	        //batchRequestButton.setVisibility(View.INVISIBLE);
 	    }
 	}
@@ -229,6 +236,8 @@ public class FBLoginFragment extends Fragment
 	                	Intent showFeedsIntent = new Intent(getActivity(),FBFeedActivity.class);
 	                	showFeedsIntent.putExtra("FeedsMap", crawlFeeds);
 	                	
+	                	bar.setVisibility(View.INVISIBLE);
+	                	
 	                	Log.d(TAG,"Going to FBFeed Activity");
 	                	startActivity(showFeedsIntent);
 	                }
@@ -248,25 +257,15 @@ public class FBLoginFragment extends Fragment
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 	    authButton.setFragment(this);
 	    
+	    bar = (ProgressBar) view.findViewById(R.id.loading_spinner);
+	    
+	    
 	    // Set user permissions for access token
 	    authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes","user_groups"));
 	    
 	    doBatchRequest();    
         Log.d(TAG, "**************doBatchRequestCompleted***********");
 	    
-//	    batchRequestButton = (Button) view.findViewById(R.id.batchRequestButton);
-//	    batchRequestButton.setOnClickListener(new View.OnClickListener() {
-//	        
-//	    	// doBatchRequest is a function which fetches all the feeds
-//	    	// and populates the hashmap.
-//	    	@Override
-//	        public void onClick(View v) 
-//	        {
-//	            doBatchRequest();    
-//	            Log.d(TAG, "**************doBatchRequestCompleted***********");
-//	        }
-//	    });
-
 
 	    return view;
 	}
