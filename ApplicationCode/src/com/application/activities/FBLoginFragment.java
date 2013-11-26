@@ -43,10 +43,9 @@ public class FBLoginFragment extends Fragment
 	private UiLifecycleHelper uiHelper;
 	MySQLiteHelper sqlHelper;
 	private HashMap<String,String> groupIDMap;
+	//private Button batchRequestButton;
 	
 	private ProgressBar bar;
-	
-	
 	
 	private static final int NumFeedsPerGroup = 3; 
 	
@@ -265,6 +264,14 @@ public class FBLoginFragment extends Fragment
 	    
 	    doBatchRequest();    
         Log.d(TAG, "**************doBatchRequestCompleted***********");
+	    
+//	    batchRequestButton = (Button) view.findViewById(R.id.batchRequestButton);
+//	    batchRequestButton.setOnClickListener(new View.OnClickListener() {
+//	              @Override
+//	              public void onClick(View v) {
+//	                  doBatchRequest();        
+//	              }
+//	          });
 	    
 
 	    return view;

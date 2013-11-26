@@ -82,6 +82,8 @@ public class HomeScreen extends Activity
 			@Override
 			public void onClick(View v) 
 			{
+				Intent twitterIntent = new Intent(getBaseContext(),MainActivity.class);
+				startActivity(twitterIntent);
 				
 				Toast.makeText(HomeScreen.this,"twitterFeedButton is clicked!", Toast.LENGTH_SHORT).show();
 			}
