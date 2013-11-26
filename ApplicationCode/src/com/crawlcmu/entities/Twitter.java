@@ -1,4 +1,4 @@
-package com.application.activities;
+package com.crawlcmu.entities;
 
 import java.util.ArrayList;
 

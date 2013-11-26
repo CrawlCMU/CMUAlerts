@@ -1,4 +1,4 @@
-package com.application.activities;
+package com.crawlcmu.entities;
 
 import com.google.gson.annotations.SerializedName;
 

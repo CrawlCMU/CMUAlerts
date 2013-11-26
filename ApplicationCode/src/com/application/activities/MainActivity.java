@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+
+import com.crawlcmu.entities.Tweet;
+import com.crawlcmu.entities.Twitter;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
