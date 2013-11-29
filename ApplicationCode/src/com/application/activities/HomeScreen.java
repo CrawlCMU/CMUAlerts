@@ -17,6 +17,7 @@ import com.application.DBLayout.Preferences;
 import com.application.FileIO.Helper;
 import com.example.crawlcmu.R;
 import com.rssreader.rssdataitem.RssReaderActivity;
+import com.shuttletimings.RouteListActivity;
 
 public class HomeScreen extends Activity 
 {
@@ -74,7 +75,8 @@ public class HomeScreen extends Activity
 			public void onClick(View v) 
 			{
 				
-				Toast.makeText(HomeScreen.this,"alertFeedButton is clicked!", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(getApplicationContext(), RouteListActivity.class);
+				startActivity(i);
 			}
 		});
 		

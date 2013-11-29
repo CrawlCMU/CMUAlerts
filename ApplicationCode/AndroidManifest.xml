@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
     <application
@@ -55,6 +55,18 @@
         <activity
             android:name="com.rssreader.rssdataitem.RssReaderActivity"
             android:label="@string/title_activity_rss_reader" >
+        </activity>
+        <activity
+            android:name="com.shuttletimings.RouteListActivity"
+            android:label="@string/title_route_list" >
+        </activity>
+        <activity
+            android:name="com.shuttletimings.RouteDetailActivity"
+            android:label="@string/title_route_detail"
+            android:parentActivityName="com.shuttletimings.RouteListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RouteListActivity" />
         </activity>
     </application>
 
