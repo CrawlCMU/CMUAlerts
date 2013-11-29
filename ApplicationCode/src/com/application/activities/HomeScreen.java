@@ -16,6 +16,7 @@ import com.application.DBLayout.MySQLiteHelper;
 import com.application.DBLayout.Preferences;
 import com.application.FileIO.Helper;
 import com.example.crawlcmu.R;
+import com.rssreader.rssdataitem.RssReaderActivity;
 
 public class HomeScreen extends Activity 
 {
@@ -48,7 +49,8 @@ public class HomeScreen extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				Toast.makeText(HomeScreen.this,"CMUFeed is clicked!", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(getApplicationContext(), RssReaderActivity.class);
+				startActivity(i);
 			}
 		});
 		
