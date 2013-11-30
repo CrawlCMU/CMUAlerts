@@ -10,45 +10,68 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
  
 public class HTMLParser {
-  public ArrayList<String> parse(String url) {
-	Document doc;
+  private Elements div;
+  
+  public ArrayList<String> parse(String url) {  
 	ArrayList<String> resultList=new ArrayList<String>();
-	try {
- 
-		// need http protocol
-		doc = Jsoup.connect(url).get();
+	String result = getH1(url,"div#contentWrapper");
+	if(result==null || result.length()==0)
+		result = getH1(url,"div#admin_2ColLevelContent");
+	resultList.add(result);
+		
+	result = getH2();
+	resultList.add(result);
+	
+	result = getP();
+	resultList.add(result);
+	
+	return resultList;
+  }
+
+  private String getH1(String url, String div) {
+		Document doc;
+		try {
+			doc = Jsoup.connect(url).get();
+			PatternMatch patternMatch = new PatternMatch();
+			this.div = doc.select(div);
+			Elements headingElem = this.div.select("h1");
+			String heading = patternMatch.clean(headingElem.toString(),"h1");
+			heading = patternMatch.cleanup(heading);
+			return heading;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private String getH2() {
+		Elements heading2Elem = this.div.select("h2");
 		PatternMatch patternMatch = new PatternMatch();
-		
-		Elements div = doc.select("div#admin_2ColLevelContent");
-		Elements headingElem = div.select("h1");
-		String heading = patternMatch.clean(headingElem.toString(),"h1");
-		heading = patternMatch.cleanup(heading);
-		System.out.println(heading); // Prints String I want to extract
-		resultList.add(heading);
-		
-		Elements heading2Elem = div.select("h2");
 		String heading2 = patternMatch.clean(heading2Elem.toString(),"h2");
 		heading2 = patternMatch.cleanup(heading2);
-		System.out.println(heading2); // Prints String I want to extract
-		resultList.add(heading2);
+		return heading2+"\n";
+	}
+ 
+	
+	private String getP(){
 		
 		Elements data = div.select("p");
+		PatternMatch patternMatch = new PatternMatch();
 		Iterator<Element> ite = data.iterator();
+		StringBuilder sb = new StringBuilder();
 		
 		ite.next();
-		
+		String result = null;
 		while(ite.hasNext()){
 			String line = ite.next().toString();
 			line = patternMatch.cleanup(line);
-			String result = patternMatch.clean(line, "other");
-			System.out.println(result);
-			resultList.add(result);	
+			if(line!=null && line.length()!=0)
+			  result = patternMatch.clean(line, "other");
+			if(result!=null)
+			  sb.append(result+"\n");	
 		}
- 
-	} catch (IOException e) {
-		e.printStackTrace();
+		return sb.toString();
 	}
-	return resultList;
-  }
- 
+	
 }

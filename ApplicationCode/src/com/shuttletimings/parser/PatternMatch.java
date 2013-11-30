@@ -11,7 +11,8 @@ public class PatternMatch {
 	final static  Pattern spanpattern = Pattern.compile("<span>(.+?)</span>");
 	
 	public String clean(String toClean, String elementType){
-		
+		if(toClean==null || toClean.length()==0)
+			return null;
 		if(elementType.equalsIgnoreCase("h1")){
 			Matcher matcher = h1pattern.matcher(toClean);
 			matcher.find();
@@ -30,7 +31,10 @@ public class PatternMatch {
 		else if(elementType.equalsIgnoreCase("strong")){
 			Matcher matcher = strongpattern.matcher(toClean);
 			matcher.find();
-			return matcher.group(1);
+			if(matcher.hitEnd())
+				return null;
+			else
+			  return matcher.group(1);
 		}
 		else if(elementType.equalsIgnoreCase("p")){
 			Matcher matcher = ppattern.matcher(toClean);
@@ -44,7 +48,7 @@ public class PatternMatch {
 				toClean = clean(toClean,"span");
 			if(toClean.contains("<strong>"))
 				toClean = clean(toClean,"strong");
-			if(toClean.contains("<strong>"))
+			if(toClean!=null && toClean.contains("<strong>"))
 				toClean = clean(toClean,"strong");
 			return toClean;
 		}
@@ -52,6 +56,8 @@ public class PatternMatch {
 	}
 	
 	public String cleanup(String toClean){
+		if(toClean==null)
+			return null;
 		toClean = toClean.replace("<br />", "");
 		toClean = toClean.replace("&nbsp;", "");
 		return toClean;
