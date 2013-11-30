@@ -31,6 +31,7 @@ public class PatternMatch {
 		else if(elementType.equalsIgnoreCase("strong")){
 			Matcher matcher = strongpattern.matcher(toClean);
 			matcher.find();
+			
 			if(matcher.hitEnd())
 				return null;
 			else
