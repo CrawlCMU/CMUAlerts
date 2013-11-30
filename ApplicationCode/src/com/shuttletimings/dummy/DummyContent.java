@@ -24,8 +24,8 @@ public class DummyContent {
 	public static List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 	private static int index=0;
 	private static String[] routes = {"Route A","Route B","Route AB"}; 
-	private static String[] urls = {"http://www.cmu.edu/police/shuttleandescort/b-route-departure-times.html" +
-			"http://www.cmu.edu/police/shuttleandescort/a-route-departure-times.html",
+	private static String[] urls = {"http://www.cmu.edu/police/shuttleandescort/a-route-departure-times.html",
+			"http://www.cmu.edu/police/shuttleandescort/b-route-departure-times.html",
 			"http://www.cmu.edu/police/shuttleandescort/ab-departure-times.html"};
 	
 	public static Map<String, String> ITEM_MAP = new HashMap<String, String>();
