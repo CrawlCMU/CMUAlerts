@@ -1,6 +1,7 @@
 package com.rssreader.rssdataitem;
 
 import java.util.List;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.application.networkstate.NetworkState;
 import com.example.crawlcmu.R;
 
 public class RssReaderActivity extends Activity {
@@ -19,6 +23,12 @@ public class RssReaderActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rss_reader);
 		activity = this;
+		
+		if(!NetworkState.haveNetworkConnection(activity)){
+			Toast.makeText(activity, "Sorry.No network connectivity", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
 		
 	    RSSDataTask task = new RSSDataTask();
         task.execute("http://www.cmu.edu/RSS/stories.rss");

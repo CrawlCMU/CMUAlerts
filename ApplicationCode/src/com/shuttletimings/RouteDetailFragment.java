@@ -6,12 +6,13 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.application.networkstate.NetworkState;
 import com.example.crawlcmu.R;
 import com.shuttletimings.dummy.DummyContent;
 import com.shuttletimings.parser.HTMLParser;
@@ -50,13 +51,17 @@ public class RouteDetailFragment extends Fragment {
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
 			mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-			
 		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
+		if(!NetworkState.haveNetworkConnection(getActivity())){
+			Toast.makeText(getActivity(), "Sorry.No network connectivity", Toast.LENGTH_LONG).show();
+		}
+		
 		View rootView = inflater.inflate(R.layout.fragment_route_detail, container, false);
 		new ParseHTMLTask(getActivity(),rootView).execute(mItem);			
 		return rootView;
