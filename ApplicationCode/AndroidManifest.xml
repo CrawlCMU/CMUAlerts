@@ -68,6 +68,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RouteListActivity" />
         </activity>
+        <activity
+            android:name="com.application.activities.HelpActivity"
+            android:label="@string/title_activity_help" >
+        </activity>
     </application>
 
 </manifest>

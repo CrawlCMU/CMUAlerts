@@ -1,19 +1,16 @@
 package com.application.activities;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.application.DBLayout.MySQLiteHelper;
-import com.application.DBLayout.Preferences;
 import com.application.FileIO.Helper;
 import com.example.crawlcmu.R;
 import com.rssreader.rssdataitem.RssReaderActivity;
@@ -102,6 +99,19 @@ public class HomeScreen extends Activity
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.home_screen, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case R.id.action_settings:
+	        Intent i = new Intent(this, HelpActivity.class);
+	        startActivity(i);
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
 	}
 
 }
