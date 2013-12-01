@@ -45,7 +45,7 @@ public class FBLoginFragment extends Fragment
 	private UiLifecycleHelper uiHelper;
 	MySQLiteHelper sqlHelper;
 	private HashMap<String,String> groupIDMap;
-	//private Button batchRequestButton;
+	private boolean hasLoggedIn = false;
 	
 	private ProgressBar bar;
 	
@@ -187,7 +187,7 @@ public class FBLoginFragment extends Fragment
 	    {
 	        Log.i(TAG, "Logged in...");
 	        bar.setVisibility(View.VISIBLE);
-	        
+	        doBatchRequest();
 	        //batchRequestButton.setVisibility(View.VISIBLE);
 	    } 
 	    else if (state.isClosed()) 
@@ -313,19 +313,8 @@ public class FBLoginFragment extends Fragment
 	    // Set user permissions for access token
 	    authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes","user_groups"));
 	    
+	    //doBatchRequest();
 	    
-	    doBatchRequest();    
-        Log.d(TAG, "**************doBatchRequestCompleted***********");
-	    
-//	    batchRequestButton = (Button) view.findViewById(R.id.batchRequestButton);
-//	    batchRequestButton.setOnClickListener(new View.OnClickListener() {
-//	              @Override
-//	              public void onClick(View v) {
-//	                  doBatchRequest();        
-//	              }
-//	          });
-	    
-
 	    return view;
 	}
 }
