@@ -6,13 +6,16 @@ import com.example.crawlcmu.R.menu;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 
 public class FBLoginActivity extends FragmentActivity {
 	private FBLoginFragment fbLoginFragment;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		Log.d("FBLoginActivity","****onCreate called");
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
 	        // Add the fragment on initial activity setup

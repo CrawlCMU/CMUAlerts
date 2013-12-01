@@ -36,7 +36,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <activity android:name="com.application.activities.MainActivity"
+        <activity android:name="com.application.activities.TwitterFeedActivity"
 				  android:label="@string/app_name">
         </activity>
         

@@ -25,6 +25,7 @@ public class FBSubscribeActivity extends ListActivity
 	private List<Preferences> listPreferences;
 	private List<CheckBoxDataModel> dataList;
 	boolean isSubscribe = false;
+	boolean noSubscriptions = false;
 	MySQLiteHelper sqlHelper;
 	
 	@Override
@@ -66,6 +67,12 @@ public class FBSubscribeActivity extends ListActivity
 			isSubscribe = true;
 		else
 			isSubscribe = false;
+		
+		noSubscriptions = i.getBooleanExtra("noSubscriptions", false);
+		
+		if(noSubscriptions)
+			Toast.makeText(getApplicationContext(),"You should be subscribed to atleast one group!", Toast.LENGTH_SHORT).show();
+		
 	}
 
 	private void checkButtonClick() 
@@ -91,10 +98,30 @@ public class FBSubscribeActivity extends ListActivity
 					    }
 					}
 					
-					Intent updateFeedsIntent = new Intent(getBaseContext(),FBLoginActivity.class);
-					startActivity(updateFeedsIntent);
+					if(checkForZeroSubscriptions())
+					{
+						Intent i = new Intent(getApplicationContext(),FBSubscribeActivity.class);
+						i.putExtra("subscription", "subscribed");
+						i.putExtra("noSubscriptions", true);
+						startActivity(i);
+					}
+					else
+					{
+						Intent updateFeedsIntent = new Intent(getBaseContext(),FBLoginActivity.class);
+						startActivity(updateFeedsIntent);
+						finish();
+					}
+				}
+
+				private boolean checkForZeroSubscriptions() 
+				{
+					List<Preferences> listPreferences;
+					listPreferences = sqlHelper.getPreferences("Facebook","subscribed");
+					if(listPreferences.isEmpty())
+						return true;
+					else
+						return false;
 					
-					finish();
 				}
 		});
 		

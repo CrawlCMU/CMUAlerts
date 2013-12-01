@@ -20,9 +20,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.DBLayout.MySQLiteHelper;
 import com.application.DBLayout.Preferences;
+import com.application.managesubscriptions.FBSubscribeActivity;
 import com.example.crawlcmu.R;
 import com.example.crawlcmu.R.id;
 import com.example.crawlcmu.R.layout;
@@ -70,6 +72,8 @@ public class FBLoginFragment extends Fragment
 	
 	private void initializeSubscriptionList() 
 	{
+		
+		Log.d(TAG, "Inititalize called");
 		groupID = 0;
 		numSubscribed = 0;
 		List<Preferences> listPreferences;
@@ -79,30 +83,50 @@ public class FBLoginFragment extends Fragment
 		// Clear the hashmap, because this function will be called every time a group is subsribed/unsubscribed
 		groupIDMap.clear();
 		
-		for(Preferences p : listPreferences)
+		if(listPreferences.size() == 0)
 		{
-			numSubscribed++;
-			// Build the hashmap of preferences
-			String title = p.getTitle();
-			String url = p.getUrl();
 			
-			String[] urlSplit = url.split("/");
-			String grpID = "";
-			boolean isGroupID = false;
+			// no groups have been subsribed to!
+			// Redirect to subscription Activity and let it handle the rest
 			
-			for(String str:urlSplit)
+			Log.d(TAG, "******* Going to subscription activity");
+			
+			Toast.makeText(getActivity(),"No groups subscribed, redirecting to subscription page!", Toast.LENGTH_SHORT).show();
+			Intent i = new Intent(getActivity(),FBSubscribeActivity.class);
+			i.putExtra("subscription", "subscribed");
+    		i.putExtra("NoSubscriptions", true);
+			startActivity(i);
+			
+		}
+		
+		else
+		{
+		
+			for(Preferences p : listPreferences)
 			{
-				if(isGroupID)
-					grpID = str;
-				if(str.contains("groups"))
-					isGroupID = true;
+				numSubscribed++;
+				// Build the hashmap of preferences
+				String title = p.getTitle();
+				String url = p.getUrl();
+				
+				String[] urlSplit = url.split("/");
+				String grpID = "";
+				boolean isGroupID = false;
+				
+				for(String str:urlSplit)
+				{
+					if(isGroupID)
+						grpID = str;
+					if(str.contains("groups"))
+						isGroupID = true;
+				}
+				
+				Log.d(TAG,"Subscribed List = "+title + "Grp ID"+grpID);
+				
+				// groupIDMap contains Name - GroupID mapping
+				// Of all groups that the user has subscribed to
+				groupIDMap.put(title, grpID);
 			}
-			
-			Log.d(TAG,"Subscribed List = "+title + "Grp ID"+grpID);
-			
-			// groupIDMap contains Name - GroupID mapping
-			// Of all groups that the user has subscribed to
-			groupIDMap.put(title, grpID);
 			
 		}
 	}
@@ -118,6 +142,8 @@ public class FBLoginFragment extends Fragment
 	    // For scenarios where the main activity is launched and user
 	    // session is not null, the session state change notification
 	    // may not be triggered. Trigger it if it's open/closed.
+	    
+	    Log.d(TAG, "*****ON RESUME");
 	    
 	    initializeSubscriptionList();
 	    
@@ -184,6 +210,12 @@ public class FBLoginFragment extends Fragment
 	private void doBatchRequest() 
 	{
 	   
+		Log.d(TAG, "DO BATCH");
+		if(groupIDMap.isEmpty())
+		{
+			Log.d(TAG, "Nothing initialized so inititalizing");
+			initializeSubscriptionList();
+		}
 	    
 	    // populate the group IDs from the groupID hashmap
 	    String[] requestIds = new String[groupIDMap.size()];
@@ -231,14 +263,33 @@ public class FBLoginFragment extends Fragment
 	                {
 	                	Log.d(TAG,"Feed Fetching Completed!");
 	                	
-	                	// now send the populated HashMap to the FBFeedActivity
-	                	Intent showFeedsIntent = new Intent(getActivity(),FBFeedActivity.class);
-	                	showFeedsIntent.putExtra("FeedsMap", crawlFeeds);
-	                	
-	                	bar.setVisibility(View.INVISIBLE);
-	                	
-	                	Log.d(TAG,"Going to FBFeed Activity");
-	                	startActivity(showFeedsIntent);
+	                	if(crawlFeeds == null || crawlFeeds.size() == 0)
+	                	{
+	                		// Close the current session
+	                		Session session = Session.getActiveSession();
+	                		session.close();
+	                		
+	                		// Show network error toast
+	                		Toast.makeText(getActivity(),"Please check your network connection and try again later ", Toast.LENGTH_LONG).show();
+	            			
+	                		
+	                	    uiHelper.onDestroy();
+	                		
+	                		// Go back to homescreen
+	                		Intent i = new Intent(getActivity(),HomeScreen.class);
+	            			startActivity(i);
+	                	}
+	                	else
+	                	{
+		                	// now send the populated HashMap to the FBFeedActivity
+		                	Intent showFeedsIntent = new Intent(getActivity(),FBFeedActivity.class);
+		                	showFeedsIntent.putExtra("FeedsMap", crawlFeeds);
+		                	
+		                	bar.setVisibility(View.INVISIBLE);
+		                	
+		                	Log.d(TAG,"Going to FBFeed Activity");
+		                	startActivity(showFeedsIntent);
+	                	}
 	                }
 	                
 	            }
@@ -261,6 +312,7 @@ public class FBLoginFragment extends Fragment
 	    
 	    // Set user permissions for access token
 	    authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes","user_groups"));
+	    
 	    
 	    doBatchRequest();    
         Log.d(TAG, "**************doBatchRequestCompleted***********");

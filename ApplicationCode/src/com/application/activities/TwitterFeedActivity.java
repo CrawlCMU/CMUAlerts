@@ -2,6 +2,7 @@ package com.application.activities;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.crawlcmu.entities.Tweet;
 import com.crawlcmu.entities.Twitter;
@@ -27,13 +29,16 @@ import java.io.*;
 import java.net.URLEncoder;
 
 /**
- * Demonstrates how to use a twitter application keys to access a user's timeline
+ * Activity that handles fetching latest twitter feeds from 
+ * AndysBuses
+ * @author ishan
+ *
  */
-public class MainActivity extends ListActivity {
+public class TwitterFeedActivity extends ListActivity {
 
 	private ListActivity activity;
 	final static String ScreenName = "AndysBuses";
-	final static String LOG_TAG = "rnc";
+	final static String LOG_TAG = "CrawlCMUTwitter";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,14 +54,23 @@ public class MainActivity extends ListActivity {
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
 		if (networkInfo != null && networkInfo.isConnected()) {
-			new DownloadTwitterTask().execute(ScreenName);
-		} else {
-			Log.v(LOG_TAG, "No network connection available.");
+			new DownloadTwitterFeedsTask().execute(ScreenName);
+		} else 
+		{
+		 	 Log.v(LOG_TAG, "No network connection available.");
+		 	// Show network error toast
+     		Toast.makeText(this,"Please check your network connection and try again later ", Toast.LENGTH_LONG).show();
+     		
+     		// Go back to homescreen
+    		Intent i = new Intent(this,HomeScreen.class);
+			startActivity(i);
+			finish();
 		}
 	}
 
 	// Uses an AsyncTask to download a Twitter user's timeline
-	private class DownloadTwitterTask extends AsyncTask<String, Void, String> {
+	private class DownloadTwitterFeedsTask extends AsyncTask<String, Void, String> 
+	{
 		final static String CONSUMER_KEY = "F6pj8C5s2x6XZpgvYLtcw";
 		final static String CONSUMER_SECRET = "9X9oBkSuThzsdE110rBSQvxh8Tl6re6OgiWd0AwQ";
 		final static String TwitterTokenURL = "https://api.twitter.com/oauth2/token";
@@ -65,7 +79,8 @@ public class MainActivity extends ListActivity {
 		//final static String TwitterStreamURL = "https://api.twitter.com/1.1/statuses/retweets/21947795900469248.json";
 		
 		@Override
-		protected String doInBackground(String... screenNames) {
+		protected String doInBackground(String... screenNames) 
+		{
 			String result = null;
 
 			if (screenNames.length > 0) {
@@ -74,12 +89,13 @@ public class MainActivity extends ListActivity {
 			return result;
 		}
 
-		// onPostExecute convert the JSON results into a Twitter object (which is an Array list of tweets
+		// onPostExecute convert the JSON results into a Twitter object which is an Array list of tweets
 		@Override
-		protected void onPostExecute(String result) {
-			Twitter twits = jsonToTwitter(result);
+		protected void onPostExecute(String result) 
+		{
+			Twitter twits = parseJsonToTwitter(result);
 
-			// lets write the results to the console as well
+			// output to Logcat
 			for (Tweet tweet : twits) {
 				Log.i(LOG_TAG, tweet.getText());
 			}
@@ -90,7 +106,7 @@ public class MainActivity extends ListActivity {
 		}
 
 		// converts a string of JSON data into a Twitter object
-		private Twitter jsonToTwitter(String result) {
+		private Twitter parseJsonToTwitter(String result) {
 			Twitter twits = null;
 			if (result != null && result.length() > 0) {
 				try {
@@ -117,7 +133,8 @@ public class MainActivity extends ListActivity {
 			return auth;
 		}
 
-		private String getResponseBody(HttpRequestBase request) {
+		private String getResponseBody(HttpRequestBase request) 
+		{
 			StringBuilder sb = new StringBuilder();
 			try {
 
@@ -126,27 +143,35 @@ public class MainActivity extends ListActivity {
 				int statusCode = response.getStatusLine().getStatusCode();
 				String reason = response.getStatusLine().getReasonPhrase();
 
-				if (statusCode == 200) {
+				if (statusCode == 200) 
+				{
 
 					HttpEntity entity = response.getEntity();
 					InputStream inputStream = entity.getContent();
 
 					BufferedReader bReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
 					String line = null;
-					while ((line = bReader.readLine()) != null) {
+					while ((line = bReader.readLine()) != null) 
+					{
 						sb.append(line);
 					}
-				} else {
+				} 
+				else 
+				{
 					sb.append(reason);
 				}
-			} catch (UnsupportedEncodingException ex) {
-			} catch (ClientProtocolException ex1) {
-			} catch (IOException ex2) {
+			} catch (UnsupportedEncodingException ex) 
+			{
+			} catch (ClientProtocolException ex1) 
+			{
+			} catch (IOException ex2) 
+			{       
 			}
 			return sb.toString();
 		}
 
-		private String getTwitterStream(String screenName) {
+		private String getTwitterStream(String screenName) 
+		{
 			String results = null;
 
 			// Step 1: Encode consumer key and secret
