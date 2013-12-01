@@ -26,6 +26,7 @@ public class RssReaderActivity extends Activity {
 		
 		if(!NetworkState.haveNetworkConnection(activity)){
 			Toast.makeText(activity, "Sorry.No network connectivity", Toast.LENGTH_LONG).show();
+			finish();
 			return;
 		}
 		

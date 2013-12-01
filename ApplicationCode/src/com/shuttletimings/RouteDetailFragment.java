@@ -60,6 +60,7 @@ public class RouteDetailFragment extends Fragment {
 		
 		if(!NetworkState.haveNetworkConnection(getActivity())){
 			Toast.makeText(getActivity(), "Sorry.No network connectivity", Toast.LENGTH_LONG).show();
+			getActivity().finish();
 		}
 		
 		View rootView = inflater.inflate(R.layout.fragment_route_detail, container, false);

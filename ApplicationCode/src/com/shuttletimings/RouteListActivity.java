@@ -1,10 +1,12 @@
 package com.shuttletimings;
 
+import com.application.networkstate.NetworkState;
 import com.example.crawlcmu.R;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 /**
  * An activity representing a list of Routes. This activity has different
@@ -46,6 +48,13 @@ public class RouteListActivity extends FragmentActivity implements
 			// 'activated' state when touched.
 			((RouteListFragment) getSupportFragmentManager().findFragmentById(
 					R.id.route_list)).setActivateOnItemClick(true);
+			
+			if(!NetworkState.haveNetworkConnection(this)){
+				Toast.makeText(this, "Sorry.No network connectivity", Toast.LENGTH_LONG).show();
+				finish();
+				return;
+			}
+			
 		}
 
 		// TODO: If exposing deep links into your app, handle intents here.
