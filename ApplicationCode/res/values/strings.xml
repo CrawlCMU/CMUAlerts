@@ -17,5 +17,27 @@
     <string name="app_id">517969238299772</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="batchRequest">Batch Request</string>
+    <string name="title_activity_rss_reader">RssReaderActivity</string>
+    <string name="title_route_list">Routes</string>
+    <string name="title_route_detail">Route Detail</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="help_title">About the app</string>
+    <string name="help_description">The app consists of 4 parts:</string>
+    <string name="help_description1">1.CMU RSS Feed : 
+Get updates about whats latest at CMU.
+</string>
+    <string name="help_description2">2. Facebook : 
+Subscribe to groups and pages related to CMU
+</string>
+	<string name="help_description3">3. Twitter : 
+Subscribe to pages on Twitter
+</string>
+	<string name="help_description4">4. Shuttle Timings: 
+Get latest shuttle timings
+</string>
+	<string name="help_description5">We sincerely hope you find the app useful.    
+	</string>
+	<string name="ishan">Ishan Pande, 18-641, CMU</string>
+	<string name="priyank">Priyank Desai, 18-641, CMU</string>
 
 </resources>
