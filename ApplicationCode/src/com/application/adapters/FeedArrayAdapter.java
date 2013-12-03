@@ -5,19 +5,17 @@ package com.application.adapters;
 
 import java.util.ArrayList;
 
-import com.crawlcmu.entities.FBFeed;
-import com.example.crawlcmu.R;
-import com.example.crawlcmu.R.drawable;
-import com.example.crawlcmu.R.id;
-import com.example.crawlcmu.R.layout;
-
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.crawlcmu.entities.FBFeed;
+import com.example.crawlcmu.R;
 
 /**
  * @author ishan
@@ -39,6 +37,8 @@ public class FeedArrayAdapter extends ArrayAdapter<FBFeed>
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) 
 	{
+		Log.d("FeedArrayAdapter","in Get View");
+		
 		LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
  

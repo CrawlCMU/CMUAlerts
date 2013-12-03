@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -56,6 +57,7 @@ public class FBLoginFragment extends Fragment
 	
 	// this is a hashmap of String (Group Name) and its Feeds are stored in ArrayList<Strings>
 	private HashMap<String, ArrayList<String>> crawlFeeds;
+	private HashMap<String, ArrayList<String>> crawlFeedsURLs;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class FBLoginFragment extends Fragment
 	    sqlHelper = new MySQLiteHelper(getActivity());
 	    groupIDMap = new HashMap<String, String>();
 	    crawlFeeds = new HashMap<String, ArrayList<String>>();
+	    crawlFeedsURLs = new HashMap<String, ArrayList<String>>();
 	    
 	    
 	    initializeSubscriptionList();
@@ -80,6 +83,8 @@ public class FBLoginFragment extends Fragment
 		listPreferences = sqlHelper.getPreferences("Facebook","subscribed");
 		
 		crawlFeeds.clear();
+		crawlFeedsURLs.clear();
+		
 		// Clear the hashmap, because this function will be called every time a group is subsribed/unsubscribed
 		groupIDMap.clear();
 		
@@ -241,19 +246,25 @@ public class FBLoginFragment extends Fragment
 	                if (graphObject != null) 
 	                {
 	                        ArrayList<String> feeds = new ArrayList<String>();
+	                        ArrayList<String> urls = new ArrayList<String>();
 	                        JSONArray groupFeeds = (JSONArray) graphObject.getProperty("data");
-	                        
 	                        if(groupFeeds!=null)
 	                        {
 	                        	Log.d(TAG, "FEEDS are available");
 	                        	for (int i=0; i < NumFeedsPerGroup; i++) {
 	            	                JSONObject grp = groupFeeds.optJSONObject(i);
-	            	                 
+	            	                
+	            	                String actions = grp.optString("actions");
+	            	                String url = parseActionsToURL(actions);
+	            	                if(url!=null)
+	            	                	urls.add(url);
+	            	                
 	            	                feeds.add(grp.optString("message"));
 	            	            }   
 	            	    		
 	                        	Log.d(TAG, "requestID = " + requestId + " Feeds = " + feeds.toString());
 	                        	crawlFeeds.put(requestId, feeds);
+	                        	crawlFeedsURLs.put(requestId, urls);
 	                        	myuserInfo.append(String.format("groups: %s\n\n", feeds.toString()));
 	                        }
 	                    	
@@ -284,6 +295,7 @@ public class FBLoginFragment extends Fragment
 		                	// now send the populated HashMap to the FBFeedActivity
 		                	Intent showFeedsIntent = new Intent(getActivity(),FBFeedActivity.class);
 		                	showFeedsIntent.putExtra("FeedsMap", crawlFeeds);
+		                	showFeedsIntent.putExtra("URLMap", crawlFeedsURLs);
 		                	
 		                	bar.setVisibility(View.INVISIBLE);
 		                	
@@ -293,6 +305,27 @@ public class FBLoginFragment extends Fragment
 	                }
 	                
 	            }
+
+				private String parseActionsToURL(String actions) 
+				{
+					String[] acts = actions.split("link");
+					for(String str : acts)
+					{
+						
+						if(str.contains("http"))
+						{
+						    str = str.replaceAll("\\\\", "");
+							String[] urls = str.split("\"");
+							for(String str1:urls)
+							{
+								if(str1.contains("http"))
+									return str1;
+							}
+							
+						}
+					}
+					return null;
+				}
 	        }));
 	    }
 	    requestBatch.executeAsync();

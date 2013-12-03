@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,7 @@ public class FBFeedActivity extends ListActivity
 	
 	private ArrayList<FBFeed> feeds;
 	private HashMap<String, ArrayList<String>> crawlFeeds = new HashMap<String, ArrayList<String>>();
+	private HashMap<String, ArrayList<String>> crawlFeedsURLs = new HashMap<String, ArrayList<String>>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -33,8 +35,11 @@ public class FBFeedActivity extends ListActivity
 		super.onCreate(savedInstanceState);
 		Intent showFeedsIntent = getIntent();
 		crawlFeeds.clear();
+		crawlFeedsURLs.clear();
 		crawlFeeds = (HashMap<String, ArrayList<String>>)showFeedsIntent.getSerializableExtra("FeedsMap");
-	    Log.v("HashMapTest", crawlFeeds.toString());
+		crawlFeedsURLs = (HashMap<String, ArrayList<String>>)showFeedsIntent.getSerializableExtra("URLMap");
+		Log.v("HashMapTest", crawlFeeds.toString());
+		Log.v("URLMapTest", crawlFeedsURLs.toString());
 	  
 	    feeds = new ArrayList<FBFeed>();
 	    
@@ -46,14 +51,16 @@ public class FBFeedActivity extends ListActivity
 	
 	private void populateFeedData() 
 	{
-		
+		ArrayList<String> URLs = new ArrayList<String>();
 		for (Map.Entry<String, ArrayList<String>> entry : crawlFeeds.entrySet()) 
 		{
 			Log.d(TAG,"Key : " + entry.getKey() + " Value : "+ entry.getValue());
 			
+			URLs = crawlFeedsURLs.get(entry.getKey());
+			int i = 0;
 			for(String str:entry.getValue())
 			{
-				FBFeed feed = new FBFeed(str, entry.getKey(), URL);
+				FBFeed feed = new FBFeed(str, entry.getKey(), URLs.get(i++));
 				feeds.add(feed);
 			}
 		}
@@ -65,10 +72,30 @@ public class FBFeedActivity extends ListActivity
 	protected void onListItemClick(ListView l, View v, int position, long id) {
  
 		//get selected items
-		String selectedValue = (String) getListAdapter().getItem(position);
-		Toast.makeText(this, selectedValue, Toast.LENGTH_SHORT).show();
- 
+		//String selectedValue = (String) getListAdapter().getItem(position);
+		FBFeed feedSelected = (FBFeed) getListAdapter().getItem(position);
+		Toast.makeText(this, feedSelected.getURL(), Toast.LENGTH_SHORT).show();
+//		Intent i = new Intent(Intent.ACTION_VIEW);
+//		i.setData(Uri.parse(feedSelected.getURL()));
+//		startActivity(i);
+		shareTextUrl(feedSelected.getURL());
 	}
+	
+	/*
+     * Method to share either text or URL.
+     */
+    private void shareTextUrl(String url) {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        // Add data to the intent, the receiving app will decide
+        // what to do with it.
+        share.putExtra(Intent.EXTRA_SUBJECT, "Title Of The Post");
+        share.putExtra(Intent.EXTRA_TEXT, url);
+
+        startActivity(Intent.createChooser(share, "Share link!"));
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 

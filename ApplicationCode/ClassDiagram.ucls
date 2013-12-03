@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <package id="1" language="java" name="com.application.activities" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/application/activities" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="230" y="-65"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="com.application.adapters" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/application/adapters" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="485" y="-62"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="com.application.DBLayout" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/application/DBLayout" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="231" y="47"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="com.application.networkstate" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/application/networkstate" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="499" y="46"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="com.crawlcmu.entities" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/crawlcmu/entities" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="200" y="129"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="com.rssreader.rssdataitem" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/rssreader/rssdataitem" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="490" y="133"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="7" language="java" name="com.shuttletimings.parser" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/shuttletimings/parser" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="216" y="210"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="com.shuttletimings" project="CrawlCMU" file="/CrawlCMU/src/com/shuttletimings" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="475" y="214"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="9" language="java" name="com.application.FileIO" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/application/FileIO" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="24" y="-63"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="10" language="java" name="com.crawlcmu.datamodel" project="CrawlCMU" 
+    file="/CrawlCMU/src/com/crawlcmu/datamodel" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="496" y="295"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="12">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="14">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="15">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="17">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="19">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
